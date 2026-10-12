@@ -8,22 +8,24 @@ pipeline {
         }
         stage('Build & Test') {
             steps {
-                sh 'mvn clean package'
+                // 'bat' executes Windows CMD commands instead of Linux 'sh'
+                bat 'mvn clean package'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t student-app:latest .'
+                    bat 'docker build -t student-app:latest .'
                 }
             }
         }
         stage('Deploy Container') {
             steps {
                 script {
-                    // Remove existing container if running, then start fresh container on port 8080
-                    sh 'docker rm -f student-container || true'
-                    sh 'docker run -d -p 8080:8080 --name student-container student-app:latest'
+                    // Windows batch equivalent for stopping/removing old container if running
+                    bat 'docker stop student-container || exit 0'
+                    bat 'docker rm student-container || exit 0'
+                    bat 'docker run -d -p 8080:8080 --name student-container student-app:latest'
                 }
             }
         }
