@@ -35,7 +35,7 @@ public class StudentApp {
             os.close();
         });
 
-        // Endpoint to add a student: http://localhost:8080/add?name=John
+    
         server.createContext("/add", exchange -> {
             String query = exchange.getRequestURI().getQuery();
             String name = "Anonymous";
